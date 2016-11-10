@@ -1,0 +1,2 @@
+run `./write \`cat r\`` `perl -e 'print "B"x25'` `perl -e 'print "C"x70'`
+
