@@ -1,0 +1,65 @@
+hw2.c: (in function main)
+hw2.c:16:2: Return value (type int) ignored: scanf("%d", &cho)
+  Result returned by function call is not used. If this is intended, can cast
+  result to (void) to eliminate message. (Use -retvalint to inhibit warning)
+hw2.c:18:2: Return value (type int) ignored: getchar()
+hw2.c:21:2: Return value (type int) ignored: winner()
+hw2.c:34:12: Passed storage word not completely defined (*word is undefined):
+                read_line (word, ...)
+  Storage derivable from a parameter, return value or global is not defined.
+  Use /*@out@*/ to denote passed or returned storage which need not be defined.
+  (Use -compdef to inhibit warning)
+hw2.c:34:2: Return value (type int) ignored: read_line(word, 20)
+hw2.c:45:12: Passed storage words not completely defined (*words is undefined):
+                quicksort (words, ...)
+hw2.c:45:19: Passed storage words not completely defined (*words is undefined):
+                quicksort (..., words + num_words - 1)
+hw2.c: (in function read_line)
+hw2.c:55:9: Operands of != have incompatible types (int, char):
+               (ch = getchar()) != '\n'
+  A character constant is used as an int. Use +charintliteral to allow
+  character constants to be used as ints.  (This is safe since the actual type
+  of a char constant is int.)
+hw2.c:57:2: Assignment of int to char: str[i++] = ch
+  To make char and int types equivalent, use +charint.
+hw2.c: (in function quicksort)
+hw2.c:68:2: Fresh storage middle not released before return
+  A memory leak has been detected. Storage allocated locally is not released
+  before the last reference to it is lost. (Use -mustfreefresh to inhibit
+  warning)
+   hw2.c:65:2: Fresh storage middle created
+hw2.c: (in function split)
+hw2.c:83:9: Implicitly temp storage high returned as implicitly only: high
+  Temp storage (associated with a formal parameter) is transferred to a
+  non-temporary reference. The storage may be released or new aliases created.
+  (Use -temptrans to inhibit warning)
+hw2.c: (in function winner)
+hw2.c:94:2: Unrecognized identifier: read
+  Identifier used in code has not been declared. (Use -unrecog to inhibit
+  warning)
+hw2.c:97:12: Fresh storage inBuf not released before return
+   hw2.c:90:2: Fresh storage inBuf created
+hw2.c:99:2: Buffer overflow possible with sprintf.  Recommend using snprintf
+               instead: sprintf
+  Use of function that may lead to buffer overflow. (Use -bufferoverflowhigh to
+  inhibit warning)
+hw2.c:99:2: Format string parameter to sprintf is not a compile-time constant:
+               fmt
+  Format parameter is not known at compile-time.  This can lead to security
+  vulnerabilities because the arguments cannot be type checked. (Use
+  -formatconst to inhibit warning)
+hw2.c:104:2: Path with no return in function declared to return int
+  There is a path through a function declared to return a value on which there
+  is no return statement. This means the execution may fall through without
+  returning a meaningful result to the caller. (Use -noret to inhibit warning)
+hw2.c:7:5: Function exported but not used outside hw2: read_line
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   hw2.c:60:1: Definition of read_line
+hw2.c:8:6: Function exported but not used outside hw2: quicksort
+   hw2.c:68:1: Definition of quicksort
+hw2.c:9:8: Function exported but not used outside hw2: split
+   hw2.c:84:1: Definition of split
+hw2.c:10:5: Function exported but not used outside hw2: winner
+   hw2.c:104:1: Definition of winner
+
