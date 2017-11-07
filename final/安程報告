@@ -1,0 +1,41 @@
+Write xor Execute (W^X)
+
+
+
+功能 ： 
+	由OpenBSD組織研發出改善buffer overflow安全問題的機制。
+	可以用於防範攻擊者利用self modifying code進行攻擊。
+
+原理 ： 
+	當memory page為可寫入時（儲存資料），不能執行。當memory page為可執行時（儲存指令），不能寫入。
+
+問題 ：
+	使用W^X並沒有辦法解決buffer overflow的問題，只能夠讓攻擊者無法在修改過後直接執行。
+
+實作 ： 
+	透過kernel以及runtime loader (ld.so)協作擴展compiler，並通過kernel追蹤memory page的情形。
+	（1）一般kernel : 
+
+	（2） vax, m68k, i386, or powerpc : 
+
+PLT (Procedure Linkage Table) 和 GOT (Global Offset Table) 實作 shared library
+
+1. GOT (Global Offset Table) :
+	把程式中會呼叫到的shared library函式建立成table， 並存入該函式在library中的絕對位址。
+	在compiler將程式轉為binary檔案時，該函式會被替換為"b @GOT+<該函式在GOT的紀錄位置>"，當執行到該行程式時，便會跳至該函式在library的絕對位址。
+
+2. PLT (Procedure Linkage Table) ：
+	當呼叫的函式太多時，解析函式會造成時間的延遲，造成使用者的體驗不佳。
+	因此透過PLT使用"延遲解析 (lazy binding)"的機制，改為在函式執行前才去填入GOT。
+	在compiler將程式轉為binary檔案時，該函式會被替換為"函式()@plt"，在跳至"b @GOT+<該函式在GOT的紀錄位置>"。
+	該行程式會跳至"linker"，linker再將函式的絕對位址填入GOT完成解析。
+
+The implementation of a WnX policy depends on the central processing unit (CPU) and memory management unit (MMU) architecture. For processors that feature an execute bit for each page of memory; OpenBSD implements two changes to make this possible:
+
+1. The signal trampoline is removed from the stack. The signal trampoline page is given read and execute permissions, while the stack segment is given read and write permissions. By doing this, the stack becomes nonexecutable.
+
+2. The mapping of shared libraries and heap memory space is changed so that the data segments do not contain objects which are read, write, and executable. This entails moving the shared library global offset table (GOT), the shared library procedure linkage table (PLT), C++ constructors (.ctors), and C++ destructors (.dtors).
+
+The GOT and PLT are mapped onto their own pages, which are made nonwritable. Minor changes to the dynamic linker are needed to accommodate this change. The . dtors and . ctors sections are moved in with the GOT and consequently become nonwritable as well. Making these changes eliminates executable objects from the data segment.
+
+
